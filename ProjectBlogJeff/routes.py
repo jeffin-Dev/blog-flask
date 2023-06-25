@@ -1,6 +1,6 @@
 from flask import render_template, url_for, request, flash, redirect
 from ProjectBlogJeff.forms import FormLoginAccount, FormCreateAccount
-from ProjectBlogJeff import app, database
+from ProjectBlogJeff import app, database, bcrypt
 from ProjectBlogJeff.models import Usuario
 
 
@@ -28,7 +28,9 @@ def login():
         return redirect(url_for('home'))
 
     if form_create_account.validate_on_submit() and 'botao_submit_criar_conta' in request.form:
-        usuario = Usuario(username=form_create_account.username.data, email=form_create_account.email.data, senha=form_create_account.senha_create.data)
+        pass_cript = bcrypt.generate_password_hash(form_create_account.senha_create.data)
+        usuario = Usuario(username=form_create_account.username.data, email=form_create_account.email.data,
+                          senha=pass_cript)
         database.session.add(usuario)
         database.session.commit()
         flash(f'Boas vindas {form_create_account.username.data}.', 'alert alert-success')

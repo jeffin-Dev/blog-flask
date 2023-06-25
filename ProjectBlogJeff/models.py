@@ -13,8 +13,8 @@ class Usuario(database.Model):
 
 
 class Post(database.Model):
-    id= database.Column(database.Integer, primary_key=True)
-    titulo= database.Column(database.String, nullable=False)
+    id = database.Column(database.Integer, primary_key=True)
+    titulo = database.Column(database.String, nullable=False)
     corpo = database.Column(database.Text, nullable=False)
     data_de_postagem = database.Column(database.DateTime, nullable=False, default=datetime.now)
     id_usuario = database.Column(database.Integer, database.ForeignKey('usuario.id'), nullable=False)

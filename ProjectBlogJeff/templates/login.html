@@ -19,7 +19,7 @@
                                 {{ form_login.email_login(class="form-control is-invalid") }}
                             <div class="invalid-feedback">
                                 {% for error in form_login.email_login.errors %}
-                                    {{ 'E-mail Inválido' }}
+                                    {{ error }}
                                 {% endfor %}
                             </div>
                             {% else %}
@@ -32,7 +32,7 @@
                                 {{ form_create_account.senha_create(class="form-control is-invalid") }}
                             <div class="invalid-feedback">
                                 {% for error in form_login.senha_login.errors %}
-                                    {{ 'Digite uma senha válida' }}
+                                    {{ error }}
                                 {% endfor %}
                             </div>
                             {% else %}
@@ -60,7 +60,7 @@
                             {{ form_create_account.username(class="form-control is-invalid") }}
                         <div class="invalid-feedback">
                             {% for error in form_create_account.username.errors %}
-                                {{ 'O usuario deve ter entre 4 a 10 caracteres' }}
+                                {{ error }}
                             {% endfor %}
                         </div>
                             {% else %}
@@ -73,7 +73,7 @@
                                 {{ form_create_account.email(class="form-control is-invalid") }}
                             <div class="invalid-feedback">
                                 {% for error in form_create_account.email.errors %}
-                                    {{ 'E-mail Inválido' }}
+                                    {{ error }}
                                 {% endfor %}
                             </div>
                             {% else %}
@@ -86,7 +86,7 @@
                                 {{ form_create_account.senha_create(class="form-control is-invalid") }}
                             <div class="invalid-feedback">
                                 {% for error in form_create_account.senha_create.errors %}
-                                    {{ 'Preencha Este Campo' }}
+                                    {{ error }}
                                 {% endfor %}
                             </div>
                             {% else %}
@@ -99,7 +99,7 @@
                                 {{ form_create_account.confirmacao_senha(class="form-control is-invalid") }}
                             <div class="invalid-feedback">
                                 {% for error in form_create_account.confirmacao_senha.errors %}
-                                    {{ 'Senha diferente' }}
+                                    {{ error }}
                                 {% endfor %}
                             </div>
                             {% else %}
