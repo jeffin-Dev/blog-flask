@@ -10,11 +10,11 @@ lista_usuarios = ['Jeff', 'Isa', 'João', 'Pedro', 'Ana']
 def home():
     return render_template('home.html')
 
-@app.route('/contatos')
+@app.route('/contato')
 def contato():
     return render_template('contato.html')
 
-@app.route('/usuario')
+@app.route('/usuarios')
 def usuarios():
     return render_template('usuarios.html', lista_usuarios=lista_usuarios)
 
