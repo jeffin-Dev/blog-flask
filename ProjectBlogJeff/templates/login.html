@@ -1,11 +1,5 @@
 {% extends 'base.html' %}
 
-<style>
-@media only screen and (max-device-width: 900) {
-    .container { width:600px; }
-}
-</style>
-
 {% block body %}
 
     <div class="container" name="LoginAndCreat">
@@ -14,6 +8,9 @@
         </div>
         <hr>
         <div class="row">
+            <div class="container" name="error">
+                {{ erro }}
+            </div>
             <div class="col" name="Colunaloginaccount">
                 <form method="POST" action="" class="border mt-4 p-2" id="1">
                     {{ form_login.csrf_token }}
@@ -50,7 +47,6 @@
                             {{ form_login.lembrar_dados.label(class="form-control-label") }}
                             {{ form_login.lembrar_dados (class="form-check-input") }}
                         </div>
-
                     <br>
                     {{ form_login.botao_submit_entrar(class="btn btn-primary", id="criarconta")}}
                 </fieldset>
@@ -113,7 +109,6 @@
                                 {{ form_create_account.confirmacao_senha(class="form-control") }}
                             {% endif %}
                     </div>
-
                     <br>
                     {{ form_create_account.botao_submit_criar_conta(class="btn btn-primary", id="criarconta") }}
                 </fieldset>
