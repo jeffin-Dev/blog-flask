@@ -1,8 +1,9 @@
 from flask import render_template, url_for, request, flash, redirect
-from ProjectBlogJeff.forms import FormLoginAccount, FormCreateAccount
+from ProjectBlogJeff.forms import FormLoginAccount, FormCreateAccount, FormEditarPerfil
 from ProjectBlogJeff import app, database, bcrypt
 from ProjectBlogJeff.models import Usuario
-from flask_login import login_user, logout_user, current_user
+from flask_login import login_user, logout_user, current_user, login_required
+from ProjectBlogJeff.funcoes import tratamento_img
 
 lista_usuarios = ['Jeff', 'Isa', 'João', 'Pedro', 'Ana']
 
@@ -15,6 +16,7 @@ def contato():
     return render_template('contato.html')
 
 @app.route('/usuarios')
+@login_required
 def usuarios():
     return render_template('usuarios.html', lista_usuarios=lista_usuarios)
 
@@ -27,7 +29,11 @@ def login():
         if usuario and bcrypt.check_password_hash(usuario.senha, form_login.senha_login.data):
             login_user(usuario, remember=form_login.lembrar_dados.data)
             flash(f'Boas vindas, {form_login.email_login.data}.', 'alert-success')
-            return redirect(url_for('home'))
+            parametro_next = request.args.get('next')
+            if parametro_next:
+                return redirect(parametro_next)
+            else:
+                return redirect(url_for('home'))
         else:
             flash('E-mail ou Senha Incorreta. Verifique e tente novamente', 'alert-danger')
     if form_create_account.validate_on_submit() and 'botao_submit_criar_conta' in request.form:
@@ -41,15 +47,41 @@ def login():
     return render_template('login.html', form_login=form_login, form_create_account=form_create_account)
 
 @app.route('/sair')
+@login_required
 def logout():
     logout_user()
     flash('Deslogado Com Sucesso.', 'alert-success')
     return redirect(url_for('login'))
 
 @app.route('/post/criar')
+@login_required
 def criar_post():
     return render_template('criar_post.html')
 
 @app.route('/perfil')
+@login_required
 def meu_perfil():
-    return render_template('meu_perfil.html')
+    form_editar_perfil = FormEditarPerfil()
+    foto_perfil = url_for('static', filename= 'fotos_perfil/{}'.format(current_user.foto_de_perfil))
+    return render_template('meu_perfil.html', foto_perfil=foto_perfil,  form_editar_perfil=form_editar_perfil)
+
+@app.route('/editar-perfil', methods=['GET', 'POST'])
+@login_required
+def editar_perfil():
+    form_editar_perfil = FormEditarPerfil()
+    if form_editar_perfil.validate_on_submit():
+        current_user.email = form_editar_perfil.email.data
+        current_user.username = form_editar_perfil.username.data
+        if form_editar_perfil.nova_foto_perfil.data:
+            nome_img = tratamento_img(form_editar_perfil.nova_foto_perfil.data)
+            current_user.foto_de_perfil = nome_img
+        database.session.commit()
+        flash('Perfil Atualizado com Sucesso.', 'alert-success')
+        return redirect(url_for('meu_perfil'))
+    elif request.method == 'GET':
+        form_editar_perfil.email.data = current_user.email
+        form_editar_perfil.username.data = current_user.username
+
+    foto_perfil = url_for('static', filename='fotos_perfil/{}'.format(current_user.foto_de_perfil))
+    return render_template('editar_perfil.html', foto_perfil=foto_perfil,
+                           form_editar_perfil=form_editar_perfil)

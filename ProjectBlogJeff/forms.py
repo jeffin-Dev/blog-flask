@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, EqualTo, Email, ValidationError
 from ProjectBlogJeff.models import Usuario
-from ProjectBlogJeff import bcrypt
+from flask_login import current_user
 
 class FormCreateAccount(FlaskForm):
     username = StringField('Nome de usuário', validators=[DataRequired(), Length(4, 10)])
@@ -27,3 +28,21 @@ class FormLoginAccount(FlaskForm):
     lembrar_dados = BooleanField('Lembrar Dados de Acessos')
     botao_submit_entrar = SubmitField('Entrar')
 
+class FormEditarPerfil(FlaskForm):
+    username = StringField('Nome de usuário', validators=[DataRequired(), Length(4, 10)])
+    email = StringField('E-mail', validators=[DataRequired(), Email(message='E-mail inválido')])
+    botao_submit_editar_perfil = SubmitField('Editar Perfil')
+    nova_foto_perfil = FileField('Foto de perfil', validators=[FileAllowed(['jpg', 'png'], message='''Extensão do arquivo
+                                                                                                   inválida. Escolha
+                                                                                                   (JPG OU PNG).''')])
+
+    def validate_username(self, username):
+        if current_user.username != username.data:
+            usuario = Usuario.query.filter_by(username=username.data).first()
+            if usuario:
+                raise ValidationError('Nome de usuário já esta em uso.')
+    def validate_email(self, email):
+        if current_user.email != email.data:
+            usuario = Usuario.query.filter_by(email=email.data).first()
+            if usuario:
+                raise ValidationError('E-mail ja esta em uso. Informe um e-mail válido.')

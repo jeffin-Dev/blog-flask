@@ -11,6 +11,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 database = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
+login_manager.login_view='login'
+login_manager.login_message='Faça Login Ou Cadastre-se Para Acessar'
+login_manager.login_message_category='alert alert-danger'
 
 from ProjectBlogJeff import routes
 

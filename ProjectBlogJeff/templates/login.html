@@ -8,11 +8,11 @@
         </div>
         <hr>
         <div class="row">
-            <div class="container" name="error">
-                {{ erro }}
-            </div>
+<!--            <div class="container" name="error">-->
+<!--                {{ erro }}-->
+<!--            </div>-->
             <div class="col" name="Colunaloginaccount">
-                <form method="POST" action="" class="border mt-4 p-2" id="1">
+                <form method="POST" action="" class="border border-dark mt-4 p-2 " id="1">
                     {{ form_login.csrf_token }}
                     <legend>Login</legend>
                     <fieldset>
@@ -26,7 +26,7 @@
                                 {% endfor %}
                             </div>
                             {% else %}
-                                {{ form_login.email_login(class="form-control") }}
+                                {{ form_login.email_login(class="form-control", style="background-color:#C0C0C0;") }}
                             {% endif %}
                         </div>
                         <div class="form-group">
@@ -39,7 +39,7 @@
                                 {% endfor %}
                             </div>
                             {% else %}
-                                {{ form_login.senha_login(class="form-control") }}
+                                {{ form_login.senha_login(class="form-control", style="background-color:#C0C0C0;") }}
                             {% endif %}
                         </div>
                         <div class="form-group">
@@ -48,12 +48,12 @@
                             {{ form_login.lembrar_dados (class="form-check-input") }}
                         </div>
                     <br>
-                    {{ form_login.botao_submit_entrar(class="btn btn-primary", id="criarconta")}}
-                </fieldset>
+                    {{ form_login.botao_submit_entrar(class="btn btn-primary")}}
+                    </fieldset>
                 </form>
             </div>
             <div class="col" name="colunacreataccount" >
-                <form method="POST" action="" class="border mt-4 p-2" id="2">
+                <form method="POST" action="" class="border border-dark mt-4 p-2" id="2">
                     {{ form_create_account.csrf_token }}
                 <legend>Criar conta</legend>
                 <fieldset>
@@ -67,7 +67,7 @@
                             {% endfor %}
                         </div>
                             {% else %}
-                                {{ form_create_account.username(class="form-control") }}
+                                {{ form_create_account.username(class="form-control", style="background-color:#C0C0C0;") }}
                             {% endif %}
                     </div>
                     <div class="form-group">
@@ -80,7 +80,7 @@
                                 {% endfor %}
                             </div>
                             {% else %}
-                                {{ form_create_account.email(class="form-control") }}
+                                {{ form_create_account.email(class="form-control", style="background-color:#C0C0C0;") }}
                             {% endif %}
                     </div>
                     <div class="form-group">
@@ -93,7 +93,7 @@
                                 {% endfor %}
                             </div>
                             {% else %}
-                                {{ form_create_account.senha_create(class="form-control") }}
+                                {{ form_create_account.senha_create(class="form-control", style="background-color:#C0C0C0;") }}
                             {% endif %}
                     </div>
                     <div class="form-group">
@@ -106,7 +106,7 @@
                                 {% endfor %}
                             </div>
                             {% else %}
-                                {{ form_create_account.confirmacao_senha(class="form-control") }}
+                                {{ form_create_account.confirmacao_senha(class="form-control", style="background-color:#C0C0C0;") }}
                             {% endif %}
                     </div>
                     <br>
