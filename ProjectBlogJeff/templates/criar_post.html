@@ -1,9 +1,46 @@
 {% extends 'base.html' %}
 
 {% block body %}
-
-    <div style="text-align: center">
-        <h1>Criar Post</h1>
-    </div>
-
+<div class="container">
+    <hr style="height:15px; background-color: black; position: relative; top: 20px; margin-bottom: 50px">
+    <form method="POST" action="" class="border mt-4 p-2">
+        {{ form.csrf_token }}
+        <legend class="text-center">Criar Post</legend>
+        <hr>
+        <fieldset>
+            <div class="form-group">
+                <br>
+                <h5>{{ form.titulo.label(class="form-control-label") }}</h5>
+                {% if form.titulo.errors %}
+                    {{ form.titulo(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.titulo.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                {{ form.titulo(class="form-control " ) }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <br>
+                <h5>{{ form.corpo.label(class="form-control-label") }}</h5>
+                {% if form.corpo.errors %}
+                    {{ form.corpo(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.corpo.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                {{ form.corpo(class="form-control" ) }}
+                {% endif %}
+            </div>
+            <br>
+            <span class=" w-100">
+                {{ form.botao_submit(class="btn btn-primary")}}
+            </span>
+        </fieldset>
+    </form>
+</div>
 {% endblock %}

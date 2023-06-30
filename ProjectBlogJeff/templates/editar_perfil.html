@@ -6,10 +6,22 @@
     <hr style="height:15px; background-color: black; position: relative; top: 20px; margin-bottom: 50px">
     <form method="POST" action="" class="border mt-4 p-2" enctype="multipart/form-data">
         {{ form_editar_perfil.csrf_token }}
-        <legend>Editar Perfil</legend>
+
+        <legend class="text-center">Editar Perfil</legend>
+        <hr>
         <fieldset>
             <div class="form-group">
-                {{ form_editar_perfil.username.label(class="form-control-label") }}
+                <div class="form-group">
+                    <h6>{{ form_editar_perfil.nova_foto_perfil.label }}</h6>
+                    {{ form_editar_perfil.nova_foto_perfil(class="form-control-file") }}
+                    {% if form_editar_perfil.nova_foto_perfil.errors %}
+                        {% for erro in form_editar_perfil.nova_foto_perfil.errors %}
+                            <span class="text-danger ">{{ erro }}</span><br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <br>
+                <h5>{{ form_editar_perfil.username.label(class="form-control-label") }}</h5>
                 {% if form_editar_perfil.username.errors %}
                     {{ form_editar_perfil.username(class="form-control is-invalid") }}
                     <div class="invalid-feedback">
@@ -22,7 +34,7 @@
                 {% endif %}
             </div>
             <div class="form-group">
-                {{ form_editar_perfil.email.label(class="form-control-label") }}
+                <h5>{{ form_editar_perfil.email.label(class="form-control-label") }}</h5>
                 {% if form_editar_perfil.email.errors %}
                     {{ form_editar_perfil.email(class="form-control is-invalid") }}
                     <div class="invalid-feedback">
@@ -35,20 +47,19 @@
                 {% endif %}
             </div>
             <br>
-            <div class="form-group">
-                {{ form_editar_perfil.nova_foto_perfil.label }}
-                {{ form_editar_perfil.nova_foto_perfil(class="form-control-file") }}
-                {% if form_editar_perfil.nova_foto_perfil.errors %}
-                    {% for erro in form_editar_perfil.nova_foto_perfil.errors %}
-
-                <span class="text-danger ">{{ erro }}</span><br>
-                    {% endfor %}
-                {% endif %}
-            </div>
+            <h5>Cursos:</h5>
+            <hr>
+            {% for curso in form_editar_perfil %}
+                {% if 'curso_' in curso.name %}
+                    {{ curso (class="form-check-input border-black rounded-circle") }}
+                    {{ curso.label(class="form-control-label") }}
+                    <br>
+                {% endif%}
+            {% endfor %}
             <br>
-                <span class="justify-content-center d-flex w-100">
-                    {{ form_editar_perfil.botao_submit_editar_perfil(class="btn btn-primary")}}
-                </span>
+            <span class="justify-content-center d-flex w-100">
+                {{ form_editar_perfil.botao_submit_editar_perfil(class="btn btn-primary")}}
+            </span>
         </fieldset>
     </form>
 </div>

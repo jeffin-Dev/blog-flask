@@ -1,11 +1,10 @@
 from flask import render_template, url_for, request, flash, redirect
-from ProjectBlogJeff.forms import FormLoginAccount, FormCreateAccount, FormEditarPerfil
+from ProjectBlogJeff.forms import FormLoginAccount, FormCreateAccount, FormEditarPerfil, CriarPost
 from ProjectBlogJeff import app, database, bcrypt
-from ProjectBlogJeff.models import Usuario
+from ProjectBlogJeff.models import Usuario, Post
 from flask_login import login_user, logout_user, current_user, login_required
-from ProjectBlogJeff.funcoes import tratamento_img
+from ProjectBlogJeff.funcoes import tratamento_img, validar_cursos, cursos_lista
 
-lista_usuarios = ['Jeff', 'Isa', 'João', 'Pedro', 'Ana']
 
 @app.route('/')
 def home():
@@ -18,7 +17,10 @@ def contato():
 @app.route('/usuarios')
 @login_required
 def usuarios():
-    return render_template('usuarios.html', lista_usuarios=lista_usuarios)
+    lista_usuarios = Usuario.query.all()
+    cursos = cursos_lista(current_user.cursos)
+    qtd_cursos = len(cursos)
+    return render_template('usuarios.html', lista_usuarios=lista_usuarios, qtd_cursos=qtd_cursos)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -53,28 +55,39 @@ def logout():
     flash('Deslogado Com Sucesso.', 'alert-success')
     return redirect(url_for('login'))
 
-@app.route('/post/criar')
+@app.route('/post/criar', methods=['GET', 'POST'])
 @login_required
 def criar_post():
-    return render_template('criar_post.html')
+    form = CriarPost()
+    if form.validate_on_submit():
+        post = Post(titulo=form.titulo.data, corpo=form.corpo.data, autor=current_user)
+        database.session.add(post)
+        database.session.commit()
+        flash('Sua publicação foi postada.','alert-success')
+        return redirect(url_for('home'))
+    return render_template('criar_post.html', form=form)
 
 @app.route('/perfil')
 @login_required
 def meu_perfil():
     form_editar_perfil = FormEditarPerfil()
     foto_perfil = url_for('static', filename= 'fotos_perfil/{}'.format(current_user.foto_de_perfil))
-    return render_template('meu_perfil.html', foto_perfil=foto_perfil,  form_editar_perfil=form_editar_perfil)
+    cursos = cursos_lista(current_user.cursos)
+    qtd_cursos = len(cursos)
+    return render_template('meu_perfil.html', foto_perfil=foto_perfil,
+                           form_editar_perfil=form_editar_perfil, cursos=cursos, qtd_cursos=qtd_cursos)
 
 @app.route('/editar-perfil', methods=['GET', 'POST'])
 @login_required
 def editar_perfil():
     form_editar_perfil = FormEditarPerfil()
     if form_editar_perfil.validate_on_submit():
-        current_user.email = form_editar_perfil.email.data
-        current_user.username = form_editar_perfil.username.data
         if form_editar_perfil.nova_foto_perfil.data:
             nome_img = tratamento_img(form_editar_perfil.nova_foto_perfil.data)
             current_user.foto_de_perfil = nome_img
+        current_user.email = form_editar_perfil.email.data
+        current_user.username = form_editar_perfil.username.data
+        current_user.cursos = validar_cursos(form_editar_perfil)
         database.session.commit()
         flash('Perfil Atualizado com Sucesso.', 'alert-success')
         return redirect(url_for('meu_perfil'))

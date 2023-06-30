@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
 from wtforms.validators import DataRequired, Length, EqualTo, Email, ValidationError
 from ProjectBlogJeff.models import Usuario
 from flask_login import current_user
@@ -36,6 +36,11 @@ class FormEditarPerfil(FlaskForm):
                                                                                                    inválida. Escolha
                                                                                                    (JPG OU PNG).''')])
 
+    curso_excel = BooleanField('Excel')
+    curso_python = BooleanField('Python')
+    curso_sql = BooleanField('Banco de Dados SQL')
+    curso_powerbi = BooleanField('Power BI')
+
     def validate_username(self, username):
         if current_user.username != username.data:
             usuario = Usuario.query.filter_by(username=username.data).first()
@@ -46,3 +51,9 @@ class FormEditarPerfil(FlaskForm):
             usuario = Usuario.query.filter_by(email=email.data).first()
             if usuario:
                 raise ValidationError('E-mail ja esta em uso. Informe um e-mail válido.')
+
+
+class CriarPost(FlaskForm):
+    titulo = StringField('Título', validators=[DataRequired()])
+    corpo = TextAreaField('Postagem', validators=[DataRequired()])
+    botao_submit = SubmitField('Postar')

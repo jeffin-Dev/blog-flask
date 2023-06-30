@@ -13,3 +13,20 @@ def tratamento_img(imagem):
     imagem_tratada.thumbnail(tamanho)
     imagem_tratada.save(caminho_final)
     return nome_completo
+
+def validar_cursos(formulario):
+    lista = []
+    for curso in formulario:
+        if 'curso_' in curso.name:
+            if curso.data:
+                lista.append(curso.label.text)
+    return ';'.join(lista)
+
+def cursos_lista(cursos):
+    lista = []
+    cursos = cursos.split(';')
+    for curso in cursos:
+        lista.append(curso)
+    return lista
+
+
