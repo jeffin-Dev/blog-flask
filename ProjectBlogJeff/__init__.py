@@ -7,10 +7,11 @@ import sqlalchemy.dialects.postgresql.psycopg2
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'd24f396f2a891195866947f4df0e1e96'
+print('oi')
 
 if os.getenv("DATABASE_URL"):
     print('cheguei aq 1')
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://database_6sxg_user:cXekSxIjegRYcximW1CcwXkcxAPaeH6i@dpg-cig5sf5ph6erq6jlp4q0-a.oregon-postgres.render.com/database_6sxg'
 else:
     print('cheguei aq 2')
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
