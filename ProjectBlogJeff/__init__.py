@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 import os
-import sqlalchemy.dialects.postgresql.psycopg2
+
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'd24f396f2a891195866947f4df0e1e96'
