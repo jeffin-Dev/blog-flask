@@ -1,5 +1,5 @@
-from flask import render_template, url_for, request, flash, redirect
-from ProjectBlogJeff.forms import FormLoginAccount, FormCreateAccount, FormEditarPerfil, CriarPost
+from flask import render_template, url_for, request, flash, redirect, abort
+from ProjectBlogJeff.forms import FormLoginAccount, FormCreateAccount, FormEditarPerfil, CriarPost, EditarPost
 from ProjectBlogJeff import app, database, bcrypt
 from ProjectBlogJeff.models import Usuario, Post
 from flask_login import login_user, logout_user, current_user, login_required
@@ -8,7 +8,9 @@ from ProjectBlogJeff.funcoes import tratamento_img, validar_cursos, cursos_lista
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    posts = Post.query.order_by(Post.id.desc())
+
+    return render_template('home.html', posts=posts)
 
 @app.route('/contato')
 def contato():
@@ -98,3 +100,35 @@ def editar_perfil():
     foto_perfil = url_for('static', filename='fotos_perfil/{}'.format(current_user.foto_de_perfil))
     return render_template('editar_perfil.html', foto_perfil=foto_perfil,
                            form_editar_perfil=form_editar_perfil)
+
+
+@app.route('/post/<id_post>', methods=['GET', 'POST'])
+def post_usuario(id_post):
+    post = Post.query.get(id_post)
+    if current_user == post.autor:
+        editar = EditarPost()
+        if request.method == 'GET':
+            editar.titulo.data = post.titulo
+            editar.corpo.data = post.corpo
+        elif editar.validate_on_submit():
+            post.titulo = editar.titulo.data
+            post.corpo = editar.corpo.data
+            database.session.commit()
+            flash('Post Atualizado.', 'alert-success')
+            return redirect(url_for('home'))
+    else:
+        editar = None
+    return render_template('post_usuario.html', post=post, editar=editar)
+
+@app.route('/post/<id_post>/excluir', methods=['GET', 'POST'])
+@login_required
+def excluir_post(id_post):
+    post = Post.query.get(id_post)
+    if current_user == post.autor:
+        database.session.delete(post)
+        database.session.commit()
+        flash('Postagem Excluida', 'alert-danger')
+        return redirect(url_for('home'))
+    else:
+        abort(403)
+    return render_template('post_usuario.html', id_post=id_post)

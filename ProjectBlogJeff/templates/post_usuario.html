@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="container" id="titulo">
+    <div class="text-align-center mt-2">
+        <div class="row posts ">
+            <div class="col-md-2 mt-4 me-4 ">
+                <div class="mt-3 px-5">
+                    <img class="rounded-circle pe-5"
+                         src="{{ url_for('static', filename='fotos_perfil/{}'.format(post.autor.foto_de_perfil)) }}"
+                         height="100">
+                    <h5 class="mt-3 justify-content-center">
+                        {{ post.autor.username }}
+                    </h5>
+                    <p><small>{{ post.data_de_postagem.strftime('%d/%m/%Y') }}</small></p>
+                </div>
+            </div>
+
+            <div class="col md-9 mt-4 ">
+                {% if editar %}
+                <h3>{{ post.titulo }}<span class="text-right" style=" font-size:15px "> -
+                    <a href="#form_editarpost" class="">Editar Post</a>
+                    /
+                    <a href="#" class="text-danger" data-toggle="modal" data-target="#exampleModal" >Excluir Post </a>
+                </span></h3>
+                {% else %}
+                <h3>{{ post.titulo }}</h3>
+                {% endif %}
+                <hr>
+                <div class="card-header mb-4">
+                    <h5>{{post.corpo}}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% if editar %}
+<div class="container">
+    <form method="POST" action="" id="form_editarpost" class="border mt-4 p-2">
+        {{ editar.csrf_token }}
+        <h1 class="text-center">Criar Post</h1>
+        <hr>
+        <fieldset>
+            <div class="editar-group ">
+                <br>
+                <h5>{{ editar.titulo.label(class="editar-control-label") }}</h5>
+                {% if editar.titulo.errors %}
+                    {{ editar.titulo(class="editar-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in editar.titulo.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                {{ editar.titulo(class="editar-control w-100" ) }}
+                {% endif %}
+            </div>
+            <div class="editar-group">
+                <br>
+                <h5>{{ editar.corpo.label(class="editar-control-label") }}</h5>
+                {% if editar.corpo.errors %}
+                    {{ editar.corpo(class="editar-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in editar.corpo.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                {{ editar.corpo(class="editar-control w-100" ) }}
+                {% endif %}
+            </div>
+            <br>
+            <span class=" w-100">
+                {{ editar.botao_submit(class="btn btn-primary")}}
+            </span>
+        </fieldset>
+    </form>
+</div>
+{% endif %}
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Excluir Postagem</h5>
+        <button type="button" class="btn btn-dark" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Deseja excluir esta postagem?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <form method="POST" action="{{ url_for('excluir_post', id_post = post.id) }}">
+              <button type="submit" class="btn btn-danger">Sim</button>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

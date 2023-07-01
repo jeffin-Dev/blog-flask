@@ -1,0 +1,49 @@
+{% extends 'post_usuario.html' %}
+
+{% block edit %}
+
+{% if editar %}
+<div class="container">
+    <form method="POST" action="" class="border mt-4 p-2">
+        {{ editar.csrf_token }}
+        <h1 class="text-center">Criar Post</h1>
+        <hr>
+        <fieldset>
+            <div class="editar-group ">
+                <br>
+                <h5>{{ editar.titulo.label(class="editar-control-label") }}</h5>
+                {% if editar.titulo.errors %}
+                    {{ editar.titulo(class="editar-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in editar.titulo.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                {{ editar.titulo(class="editar-control w-100" ) }}
+                {% endif %}
+            </div>
+            <div class="editar-group">
+                <br>
+                <h5>{{ editar.corpo.label(class="editar-control-label") }}</h5>
+                {% if editar.corpo.errors %}
+                    {{ editar.corpo(class="editar-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in editar.corpo.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                {{ editar.corpo(class="editar-control w-100" ) }}
+                {% endif %}
+            </div>
+            <br>
+            <span class=" w-100">
+                {{ editar.botao_submit(class="btn btn-primary")}}
+            </span>
+        </fieldset>
+    </form>
+</div>
+{% endif %}
+
+{% endblock%}

@@ -1,7 +1,32 @@
 body{
-    background-color:#A9A9A9;
+    background-color:#f2f5f8;
 }
 
+.titulo{
+    color: blue;
+}
+
+a:link {
+  color: black;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:hover {
+  color: blue;
+  background-color: transparent;
+
+}
+
+a:active {
+  color: blue;
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+.posts{
+background-color: #A9A9A9 ;
+}
 .form-control{
    background-color:#C0C0C0;
 }

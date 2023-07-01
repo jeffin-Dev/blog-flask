@@ -1,10 +1,37 @@
 {% extends 'base.html' %}
-
 {% block body %}
 
-    <div class="container mt-4">
-        <h1>ESTE É MEU PRIMEIRO SITE (usei h1 aqui)</h1>
-        <p>Usei um paragrafo aqui</p>
+<div class="container" id="titulo">
+    <h1 class="titulo">POSTAGENS DO BLOG</h1>
+    <h2>Sejam Bem Vindos!</h2>
+    <hr>
+    {% for post in posts %}
+    <div class="text-align-center mt-2">
+        <div class="row posts ">
+            <div class="col-md-3 mt-4 me-4 ">
+                <div class="mt-1 px-3 ">
+                    <img class="rounded-circle pe-5"
+                         src="{{ url_for('static', filename='fotos_perfil/{}'.format(post.autor.foto_de_perfil)) }}"
+                         height="100">
+                    <h5 class="mt-3 justify-content-center">
+                        {{ post.autor.username }}
+                    </h5>
+                    <p><small>{{ post.data_de_postagem.strftime('%d/%m/%Y') }}</small></p>
+                </div>
+            </div>
+            <div class="col md-9 mt-4 ">
+                <a class="link- link-underline-opacity-0" href="{{ url_for('post_usuario', id_post=post.id) }}">
+                <h2>{{ post.titulo }}</h2>
+                </a>
+                <hr>
+                <div class="card-header mb-4">
+                    <h5>{{post.corpo}}</h5>
+                </div>
+            </div>
+        </div>
+        <span style="color:white">a </span>
     </div>
+    {% endfor %},
 
+</div>
 {% endblock %}
