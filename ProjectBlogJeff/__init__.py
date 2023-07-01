@@ -21,5 +21,6 @@ login_manager.login_view='login'
 login_manager.login_message='Faça Login Ou Cadastre-se Para Acessar'
 login_manager.login_message_category='alert alert-danger'
 
+
 from ProjectBlogJeff import routes
 
